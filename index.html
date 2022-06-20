@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" />
+    <link rel="stylesheet" href="css/style.css">
+    <script defer src="https://unpkg.com/alpinejs@3.9.1/dist/cdn.min.js"></script>
+    <title>Document</title>
+
+</head>
+
+<body>
+    <div class="flex items-center justify-around relative h-screen">
+        <!-- step1 -->
+        <div class="start-page w-4/5 my-0 mx-auto flex flex-col min-w-375 absolute hidden">
+            <!-- 타이틀 -->
+            <h1 class="py-20 text-center font-semibold text-2xl">Card Game</h1>
+            <!-- 캐릭터선택 밑 닉네임 -->
+            <div class="justify-around flex py-20">
+                <button class="max-w-xs rounded-full flex items-center text-sm focus:outline-none relative ">
+                    <img class="h-20 w-20 rounded-full" src='https://avatars.githubusercontent.com/u/64538277'
+                        alt="avatar" />
+                    <span
+                        class='absolute bottom-0 right-0 h-4 w-4 rounded-full bg-emerald-500 ring ring-white'>selecte</span>
+                </button>
+            </div>
+            <!-- 이름입력버튼 -->
+            <main class="flex w-full items-center justify-center">
+                <div x-data="{ open : false }" class="p-2 bg-white border shadow rounded w-96">
+
+                    <div x-show="!open" class="flex justify-between items-center">
+                        <div class="display-name ml-2">게스트</div>
+                        <button type="button"
+                            class="btn bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 font-medium rounded "
+                            @click="open = !open">Edit</button>
+                    </div>
+
+                    <!-- container after clicked "EDIT" -->
+                    <div x-show="open" class="flex justify-between items-center">
+                        <input type="text" class="user-name w-full bg-gray-100 rounded p-2 mr-4" value="게스트">
+
+                        <div class="flex justify-center items-center space-x-2">
+                            <button type="button"
+                                class="rounded bg-emerald-500 hover:bg-emerald-600 w-10 h-10 text-white text-3xl"
+                                @click="open = false" onclick="setName()">
+                                <i class='bx bx-check'></i>
+                            </button>
+                            <button type="button"
+                                class="rounded bg-red-500 hover:bg-red-600 text-white w-10 h-10 text-3xl"
+                                @click="open = false">
+                                <i class='bx bx-x'></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </main>
+            <!-- 버튼모음 -->
+            <div class="flex justify-center py-20">
+                <button type="button"
+                    class="border mx-10 border-green-500 bg-green-500 text-white rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-green-600 focus:outline-none focus:shadow-outline"
+                    onclick="gameDepth({depth:2})">
+                    게임시작
+                </button>
+                <button type="button"
+                    class="border mx-10 border-green-500 bg-green-500 text-white rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-green-600 focus:outline-none focus:shadow-outline">
+                    설정
+                </button>
+            </div>
+        </div>
+
+        <!-- step2 게임시작 -->
+        <div
+            class="game-page start-page w-4/5 my-0 mx-auto  items-center justify-center flex flex-col min-w-375 absolute ">
+            <!-- 유저 사진 이름 -->
+            <div class="flex items-center justify-center col-auto">
+                <img class="h-20 w-20 inline-block rounded-full" src='https://avatars.githubusercontent.com/u/64538277'
+                    alt="avatar" />
+                <h1 class="profile-name py-10 text-center font-semibold text-2xl">
+                    게스트네임
+                </h1>
+            </div>
+            <!-- 점수판 -->
+            <button
+                class=" flex shadow w-32 block border-green-500 border-2 rounded-full focus:outline-none focus:border-green-500 px-4 py-2 text-green-500 hover:bg-green-500 hover:text-white">
+                <span>score:</span><span>0</span>
+
+            </button>
+            <!-- 카드공간 -->
+            <div>
+                <ul class=" flex card-zone flex-wrap justify-around">
+
+                </ul>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script src="app/app.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,7 @@
+.hide {display:none}
+.show {display:block}
+.card {padding:120px; margin:10px 0; border-radius:10px; color:gray; box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;}
+
+@media screen and (min-width:321px) and (max-width:768px) {
+    .card {padding:40px; }
+}
