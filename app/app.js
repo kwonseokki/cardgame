@@ -29,14 +29,14 @@ function gameDepth(obj) {
     }
 }
 var cards = [
-    '카드1',
-    '카드1',
-    '카드2',
-    '카드2',
-    '카드3',
-    '카드3',
-    '카드4',
-    '카드4',
+    'https://images.velog.io/images/mokyoungg/post/6659a8e8-5234-49e5-b3da-a3816c08bfdc/%ED%83%80%EC%9E%85%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8%20%EB%A1%9C%EA%B3%A0.svg',
+    'https://images.velog.io/images/mokyoungg/post/6659a8e8-5234-49e5-b3da-a3816c08bfdc/%ED%83%80%EC%9E%85%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8%20%EB%A1%9C%EA%B3%A0.svg',
+    'https://images.velog.io/images/cyheum/post/a21ac839-e534-4eb3-8fa5-342a45818a53/react-logo.png',
+    'https://images.velog.io/images/cyheum/post/a21ac839-e534-4eb3-8fa5-342a45818a53/react-logo.png',
+    'https://images.velog.io/images/spielraum/post/167dacb2-a04a-4f00-b817-22ed7c048638/Coralogix-Nodejs-integration.jpg',
+    'https://images.velog.io/images/spielraum/post/167dacb2-a04a-4f00-b817-22ed7c048638/Coralogix-Nodejs-integration.jpg',
+    'https://images.velog.io/images/hongduhyeon/post/ebc33b2c-f8c5-4792-9a2f-b1dbc5529372/sass.png',
+    'https://images.velog.io/images/hongduhyeon/post/ebc33b2c-f8c5-4792-9a2f-b1dbc5529372/sass.png',
 ];
 function shuffle(cards) {
     return cards.sort(function () { return Math.random() - 0.5; });
@@ -44,11 +44,105 @@ function shuffle(cards) {
 var shuffled = shuffle(cards);
 function cardSet(shuffled) {
     shuffled.forEach(function (element, index) {
-        var card = document.createElement('li');
-        card.classList.add('bg-gray-50');
-        card.classList.add('card');
-        card.innerText = element;
-        cardZone.appendChild(card);
+        /* 태그생성 */
+        var card = document.createElement('li'); // 카드 컨테이너 생성
+        var cardFront = document.createElement('div'); // 카드전면
+        var cardBack = document.createElement('div'); // 카드후면
+        var indexStr = index.toString();
+        card.appendChild(cardFront); // 카드에 카드전면 생성
+        card.appendChild(cardBack); // 카드에 카드후면 생성
+        card.classList.add('card'); // 카드컨테이너에 card클래스 부여
+        card.setAttribute('value', indexStr);
+        cardFront.classList.add('front');
+        cardBack.classList.add('back');
+        cardFront.innerHTML = "?";
+        cardBack.style.backgroundImage = "url('".concat(element, "')");
+        cardFront.setAttribute('value', element); // 각 카드마다 value속성으로 카드값 부여
+        cardZone.appendChild(card); // 카드존 영역에 자식으로 카드 생성
     });
+    // 카드가 셋팅되고 함수실행
+    selecteCard();
+}
+;
+function selecteCard() {
+    var cardList = document.querySelectorAll(".card");
+    var cardStorage = {
+        first: "",
+        second: "",
+        seletedNumber: "999"
+    };
+    cardList.forEach(function (e) {
+        e.addEventListener("click", function (e) {
+            var selected = e.target;
+            var selectedCard = selected.getAttribute('value');
+            var currentTarget = e.currentTarget;
+            var TargetFront = e.target;
+            var currentIndex = currentTarget.getAttribute('value');
+            var TargetBack = currentTarget.children[1];
+            if (cardStorage.first == "") { // 첫번째 선택한 카드의값 
+                TargetFront.classList.add("on");
+                TargetBack.classList.add("on");
+                cardStorage.first = selectedCard;
+                cardStorage.seletedNumber = currentIndex;
+            }
+            else if (cardStorage.seletedNumber !== currentIndex) {
+                cardStorage.second = selectedCard; // 두번째 선택한 카드의값 
+                TargetFront.classList.add("on");
+                TargetBack.classList.add("on");
+                matchCard(cardStorage.first, cardStorage.second); // 매치하는 함수로인자 넘김
+                cardStorage.first = "";
+                cardStorage.second = "";
+            }
+            return;
+        });
+    });
+}
+var sucuessdVal = [];
+var completedCnt = 0;
+function matchCard(first, second) {
+    var firstVal = first;
+    var secondVal = second;
+    var num = 50;
+    // 카드짝 맞을떄
+    if (firstVal == secondVal) {
+        sucuessdVal.push(first);
+        completedCnt++;
+        cardAnimation(sucuessdVal);
+        calcScore(0, completedCnt);
+    }
+    // 짝 안맞을떄
+    else {
+        calcScore(num, completedCnt);
+        cardAnimation(sucuessdVal);
+    }
+}
+function cardAnimation(sucuessdVal) {
+    var cards = document.querySelectorAll('.card'); // 모든카드요소 선택
+    cards.forEach(function (e, idx, arr) {
+        // 카드 전부뒤집기 
+        var front = e.children[0]; // li > div class='front'
+        var back = e.children[1]; // li > div class='back'
+        if (!(sucuessdVal.includes(front.getAttribute('value')))) {
+            // 현재뒤집은 카드에 성공value가 담긴 배열이 포함안되야 카드뒤집기 
+            setTimeout(function () {
+                front.classList.remove('on');
+                back.classList.remove('on');
+            }, 1000);
+        }
+        return;
+    });
+}
+var currentScore = 500;
+function calcScore(num, completedCnt) {
+    currentScore -= num;
+    var dispScore = document.getElementById('display-score');
+    dispScore.innerHTML = currentScore.toString();
+    if (currentScore == 0) {
+        alert("실패");
+        location.reload();
+    }
+    if (completedCnt == 4) {
+        alert("\uAC8C\uC784\uC885\uB8CC \uB2C8\uC810\uC218".concat(currentScore));
+    }
 }
 cardSet(shuffled);

@@ -16,7 +16,7 @@
 <body>
     <div class="flex items-center justify-around relative h-screen">
         <!-- step1 -->
-        <div class="start-page w-4/5 my-0 mx-auto flex flex-col min-w-375 absolute hidden">
+        <div class="start-page w-4/5 my-0 mx-auto flex flex-col min-w-375 absolute ">
             <!-- 타이틀 -->
             <h1 class="py-20 text-center font-semibold text-2xl">Card Game</h1>
             <!-- 캐릭터선택 밑 닉네임 -->
@@ -65,16 +65,18 @@
                     onclick="gameDepth({depth:2})">
                     게임시작
                 </button>
+                <a href="https://github.com/kwonseokki/cardgame">
                 <button type="button"
                     class="border mx-10 border-green-500 bg-green-500 text-white rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-green-600 focus:outline-none focus:shadow-outline">
-                    설정
+                    github
                 </button>
+            </a>
             </div>
         </div>
 
         <!-- step2 게임시작 -->
         <div
-            class="game-page start-page w-4/5 my-0 mx-auto  items-center justify-center flex flex-col min-w-375 absolute ">
+            class="game-page start-page w-4/5 my-0 mx-auto  items-center justify-center flex flex-col min-w-375 absolute hidden">
             <!-- 유저 사진 이름 -->
             <div class="flex items-center justify-center col-auto">
                 <img class="h-20 w-20 inline-block rounded-full" src='https://avatars.githubusercontent.com/u/64538277'
@@ -86,7 +88,7 @@
             <!-- 점수판 -->
             <button
                 class=" flex shadow w-32 block border-green-500 border-2 rounded-full focus:outline-none focus:border-green-500 px-4 py-2 text-green-500 hover:bg-green-500 hover:text-white">
-                <span>score:</span><span>0</span>
+                <span>score:</span> &nbsp;&nbsp;<span id="display-score">500</span>
 
             </button>
             <!-- 카드공간 -->
