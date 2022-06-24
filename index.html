@@ -9,7 +9,11 @@
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" />
     <link rel="stylesheet" href="css/style.css">
     <script defer src="https://unpkg.com/alpinejs@3.9.1/dist/cdn.min.js"></script>
-    <title>Document</title>
+    <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-storage.js"></script>
+    <title>카드게임</title>
 
 </head>
 
@@ -66,11 +70,11 @@
                     게임시작
                 </button>
                 <a href="https://github.com/kwonseokki/cardgame">
-                <button type="button"
-                    class="border mx-10 border-green-500 bg-green-500 text-white rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-green-600 focus:outline-none focus:shadow-outline">
-                    github
-                </button>
-            </a>
+                    <button type="button"
+                        class="border mx-10 border-green-500 bg-green-500 text-white rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-green-600 focus:outline-none focus:shadow-outline">
+                        github
+                    </button>
+                </a>
             </div>
         </div>
 
@@ -93,16 +97,73 @@
             </button>
             <!-- 카드공간 -->
             <div>
-                <ul class=" flex card-zone flex-wrap justify-around">
+                <ul class=" flex max-w-screen-lg card-zone flex-wrap justify-around">
 
                 </ul>
             </div>
 
         </div>
 
-    </div>
+        <div class="modal hidden">
+            <div style="z-index:1000;"
+                class="bg-slate-800 bg-opacity-50 flex justify-center items-center absolute top-0 right-0 bottom-0 left-0">
+                <div class="bg-white px-10 py-14 rounded-md text-center">
+                    <h1 class="text-xl mb-4 font-bold text-slate-500">니점수 <span id="my-score"></span></h1>
+                    <div>
+                        <!-- 순위 -->
+                        <div class="flex flex-col h-96">
+                            <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
+                                <div class="py-2 inline-block min-w-full sm:px-6 lg:px-8">
+                                    <div class="overflow-hidden">
+                                        <table class="min-w-full text-center">
+                                            <thead class="border-b">
+                                                <tr>
+                                                    <th scope="col" class="text-sm font-medium text-gray-900 px-6 py-4">
+                                                        이름
+                                                    </th>
+                                                    <th scope="col" class="text-sm font-medium text-gray-900 px-6 py-4">
+                                                        점수
+                                                    </th>
+                                                    <th scope="col" class="text-sm font-medium text-gray-900 px-6 py-4">
+                                                        Heading
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr class="border-b">
+                                                    <td
+                                                        class="text-sm text-gray-900 font-medium px-6 py-4 whitespace-nowrap">
+                                                        Default
+                                                    </td>
+                                                    <td
+                                                        class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                                        Cell
+                                                    </td>
+                                                    <td
+                                                        class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                                        Cell
+                                                    </td>
+                                                </tr>
 
-    <script src="app/app.js"></script>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="bg-green-500 px-4 py-2 rounded-md text-md text-white"
+                        onclick="reload('retry')">다시하기</button>
+                    <button class="bg-red-500 px-7 py-2 ml-2 rounded-md text-md text-white font-semibold"
+                        onclick="reload('first')">처음으로</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="app/interface.js"></script>
+    <script src="app/app.js" ></script>
+    <script src="app/rank.js"></script>
+
 </body>
 
 </html>

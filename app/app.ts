@@ -8,16 +8,17 @@ const cardZone = document.querySelector('.card-zone') as Element;
 function setName() {
     if (userName instanceof HTMLInputElement && userName.value.length >= 3) {
         dispName.innerHTML = userName.value;
-        profileName.innerHTML = userName.value;
         localStorage.setItem('name', userName.value);
+        profileName.innerHTML = userName.value;
     }
     else {
         alert("닉네임은 3글자 이상으로 설정해주세요.");
-    }
+    
 }
-interface depth {
-    depth: number
 }
+
+
+// 게임단계
 function gameDepth(obj: depth) {
     // 1:초기화면
     // 2:게임화면
@@ -33,6 +34,7 @@ function gameDepth(obj: depth) {
     }
 }
 
+// 카드
 const cards: string[] = [
     'https://images.velog.io/images/mokyoungg/post/6659a8e8-5234-49e5-b3da-a3816c08bfdc/%ED%83%80%EC%9E%85%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8%20%EB%A1%9C%EA%B3%A0.svg',
     'https://images.velog.io/images/mokyoungg/post/6659a8e8-5234-49e5-b3da-a3816c08bfdc/%ED%83%80%EC%9E%85%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8%20%EB%A1%9C%EA%B3%A0.svg',
@@ -44,17 +46,21 @@ const cards: string[] = [
     'https://images.velog.io/images/hongduhyeon/post/ebc33b2c-f8c5-4792-9a2f-b1dbc5529372/sass.png',
 ]
 
+// 카드내용 무작위로 셔플
 function shuffle(cards: string[]) {
     return cards.sort(() => Math.random() - 0.5);
 }
-
+// 결과값을 shuffled 변수에 저장
 const shuffled = shuffle(cards);
 
-
-
+// 카드셋팅
 function cardSet(shuffled: string[]) {
+    while (cardZone.hasChildNodes()) {
+        cardZone.removeChild(cardZone.firstChild as Element);
+    }
 
     shuffled.forEach((element, index) => {
+
         /* 태그생성 */
         const card = document.createElement('li');    // 카드 컨테이너 생성
         const cardFront = document.createElement('div'); // 카드전면
@@ -67,7 +73,7 @@ function cardSet(shuffled: string[]) {
         cardFront.classList.add('front');
         cardBack.classList.add('back');
         cardFront.innerHTML = "?";
-        cardBack.style.backgroundImage=`url('${element}')`
+        cardBack.style.backgroundImage = `url('${element}')`;
         cardFront.setAttribute('value', element); // 각 카드마다 value속성으로 카드값 부여
         cardZone.appendChild(card); // 카드존 영역에 자식으로 카드 생성
     });
@@ -75,12 +81,9 @@ function cardSet(shuffled: string[]) {
     selecteCard();
 };
 
-interface cardStorage {
-    first: string;
-    second: string;
-    seletedNumber: string | null;
-}
 
+
+// 카드선택 
 function selecteCard() {
     const cardList = document.querySelectorAll(".card");
     const cardStorage: cardStorage = {
@@ -104,12 +107,12 @@ function selecteCard() {
                 TargetBack.classList.add("on");
                 cardStorage.first = selectedCard;
                 cardStorage.seletedNumber = currentIndex;
+                console.log(cardStorage.first);
 
             } else if (cardStorage.seletedNumber !== currentIndex) {
                 cardStorage.second = selectedCard; // 두번째 선택한 카드의값 
                 TargetFront.classList.add("on");
                 TargetBack.classList.add("on");
-
                 matchCard(cardStorage.first, cardStorage.second); // 매치하는 함수로인자 넘김
                 cardStorage.first = "";
                 cardStorage.second = "";
@@ -132,14 +135,21 @@ function matchCard(first: string, second: string) {
         sucuessdVal.push(first);
         completedCnt++;
         cardAnimation(sucuessdVal);
-        calcScore(0,  completedCnt);
+        calcScore(0, completedCnt);
     }
     // 짝 안맞을떄
     else {
-        calcScore(num,  completedCnt);
+        calcScore(num, completedCnt);
         cardAnimation(sucuessdVal);
     }
 
+}
+
+const convertCard = (front: Element, back: Element) => {
+    setTimeout(() => {
+        front.classList.remove('on');
+        back.classList.remove('on');
+    }, 800);
 }
 
 function cardAnimation(sucuessdVal: any) {
@@ -152,32 +162,51 @@ function cardAnimation(sucuessdVal: any) {
 
         if (!(sucuessdVal.includes(front.getAttribute('value')))) {
             // 현재뒤집은 카드에 성공value가 담긴 배열이 포함안되야 카드뒤집기 
-            setTimeout(() => {
-                front.classList.remove('on');
-                back.classList.remove('on');
-            }, 1000);
+            convertCard(front, back);
         }
         return;
-
     })
 
 }
 
+
+
 let currentScore: number = 500;
+const myScore = document.querySelector('#my-score') as Element;
+const modal = document.querySelector('.modal');
 
 function calcScore(num: number, completedCnt: number) {
-    currentScore -= num;
     const dispScore: any = document.getElementById('display-score');
+
+    currentScore -= num;
     dispScore.innerHTML = currentScore.toString();
     if (currentScore == 0) {
-        alert("실패");
-        location.reload();
+        modal?.classList.remove('hidden');
+        myScore.innerHTML = "";
     }
-    if(completedCnt == 4) {
-        alert(`게임종료 니점수${currentScore}`);
+    if (completedCnt == 4) {
+        modal?.classList.remove('hidden');
+        myScore.innerHTML = currentScore.toString();
+     
     }
 }
 
+function reload(msg: string) {
+    // 처음으로
+    modal?.classList.add('hidden');
+    if (msg == "first") {
+        location.reload();
+    }    // 다시하기
+    else if (msg == "retry") {
+        gameDepth({ depth: 2 });
+        sucuessdVal = [];
+        completedCnt = 0;
+        currentScore=500;
+        cardAnimation(sucuessdVal);
+        shuffle(cards);
+        cardSet(shuffled);
+    }
+}
 
 cardSet(shuffled);
 
