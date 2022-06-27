@@ -5,6 +5,7 @@ const gamePage = document.querySelector('.game-page') as Element;
 const profileName = document.querySelector('.profile-name') as Element;
 const cardZone = document.querySelector('.card-zone') as Element;
 
+// 유저이름 화면에 표시
 function setName() {
     if (userName instanceof HTMLInputElement && userName.value.length >= 3) {
         dispName.innerHTML = userName.value;
@@ -13,7 +14,6 @@ function setName() {
     }
     else {
         alert("닉네임은 3글자 이상으로 설정해주세요.");
-    
 }
 }
 
@@ -86,7 +86,7 @@ function cardSet(shuffled: string[]) {
 // 카드선택 
 function selecteCard() {
     const cardList = document.querySelectorAll(".card");
-    const cardStorage: cardStorage = {
+    const selectedCardVal: cardStorage = {
         first: "",
         second: "",
         seletedNumber: "999",
@@ -102,20 +102,20 @@ function selecteCard() {
             let currentIndex = currentTarget.getAttribute('value');
             let TargetBack = currentTarget.children[1];
 
-            if (cardStorage.first == "") { // 첫번째 선택한 카드의값 
+            if (selectedCardVal.first == "") { // 첫번째 선택한 카드의값 
                 TargetFront.classList.add("on");
                 TargetBack.classList.add("on");
-                cardStorage.first = selectedCard;
-                cardStorage.seletedNumber = currentIndex;
-                console.log(cardStorage.first);
+                selectedCardVal.first = selectedCard;
+                selectedCardVal.seletedNumber = currentIndex;
+                console.log(selectedCardVal.first);
 
-            } else if (cardStorage.seletedNumber !== currentIndex) {
-                cardStorage.second = selectedCard; // 두번째 선택한 카드의값 
+            } else if (selectedCardVal.seletedNumber !== currentIndex) {
+                selectedCardVal.second = selectedCard; // 두번째 선택한 카드의값 
                 TargetFront.classList.add("on");
                 TargetBack.classList.add("on");
-                matchCard(cardStorage.first, cardStorage.second); // 매치하는 함수로인자 넘김
-                cardStorage.first = "";
-                cardStorage.second = "";
+                matchCard(selectedCardVal.first, selectedCardVal.second); // 매치하는 함수로인자 넘김
+                selectedCardVal.first = "";
+                selectedCardVal.second = "";
             }
             return;
 
@@ -123,7 +123,7 @@ function selecteCard() {
     })
 }
 
-let sucuessdVal: any = [];
+let sucuessdVal: Array<string> = [];
 let completedCnt: number = 0;
 function matchCard(first: string, second: string) {
     const firstVal = first;
@@ -152,7 +152,7 @@ const convertCard = (front: Element, back: Element) => {
     }, 800);
 }
 
-function cardAnimation(sucuessdVal: any) {
+function cardAnimation(sucuessdVal: Array<string>) {
     const cards = document.querySelectorAll('.card'); // 모든카드요소 선택
 
     cards.forEach((e, idx, arr) => {
@@ -160,7 +160,7 @@ function cardAnimation(sucuessdVal: any) {
         let front = e.children[0]; // li > div class='front'
         let back = e.children[1];  // li > div class='back'
 
-        if (!(sucuessdVal.includes(front.getAttribute('value')))) {
+        if (!(sucuessdVal.includes(front.getAttribute('value')as string))) {
             // 현재뒤집은 카드에 성공value가 담긴 배열이 포함안되야 카드뒤집기 
             convertCard(front, back);
         }
@@ -173,10 +173,10 @@ function cardAnimation(sucuessdVal: any) {
 
 let currentScore: number = 500;
 const myScore = document.querySelector('#my-score') as Element;
-const modal = document.querySelector('.modal');
-
+const modal = document.querySelector('.modal')as Element;
+const dispScore = document.getElementById('display-score')as Element;
 function calcScore(num: number, completedCnt: number) {
-    const dispScore: any = document.getElementById('display-score');
+    
 
     currentScore -= num;
     dispScore.innerHTML = currentScore.toString();
@@ -187,7 +187,7 @@ function calcScore(num: number, completedCnt: number) {
     if (completedCnt == 4) {
         modal?.classList.remove('hidden');
         myScore.innerHTML = currentScore.toString();
-     
+        addRank(userName.value, currentScore);
     }
 }
 

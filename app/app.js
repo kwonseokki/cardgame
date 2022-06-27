@@ -4,6 +4,7 @@ var startPage = document.querySelector('.start-page');
 var gamePage = document.querySelector('.game-page');
 var profileName = document.querySelector('.profile-name');
 var cardZone = document.querySelector('.card-zone');
+// 유저이름 화면에 표시
 function setName() {
     if (userName instanceof HTMLInputElement && userName.value.length >= 3) {
         dispName.innerHTML = userName.value;
@@ -75,7 +76,7 @@ function cardSet(shuffled) {
 // 카드선택 
 function selecteCard() {
     var cardList = document.querySelectorAll(".card");
-    var cardStorage = {
+    var selectedCardVal = {
         first: "",
         second: "",
         seletedNumber: "999"
@@ -88,20 +89,20 @@ function selecteCard() {
             var TargetFront = e.target;
             var currentIndex = currentTarget.getAttribute('value');
             var TargetBack = currentTarget.children[1];
-            if (cardStorage.first == "") { // 첫번째 선택한 카드의값 
+            if (selectedCardVal.first == "") { // 첫번째 선택한 카드의값 
                 TargetFront.classList.add("on");
                 TargetBack.classList.add("on");
-                cardStorage.first = selectedCard;
-                cardStorage.seletedNumber = currentIndex;
-                console.log(cardStorage.first);
+                selectedCardVal.first = selectedCard;
+                selectedCardVal.seletedNumber = currentIndex;
+                console.log(selectedCardVal.first);
             }
-            else if (cardStorage.seletedNumber !== currentIndex) {
-                cardStorage.second = selectedCard; // 두번째 선택한 카드의값 
+            else if (selectedCardVal.seletedNumber !== currentIndex) {
+                selectedCardVal.second = selectedCard; // 두번째 선택한 카드의값 
                 TargetFront.classList.add("on");
                 TargetBack.classList.add("on");
-                matchCard(cardStorage.first, cardStorage.second); // 매치하는 함수로인자 넘김
-                cardStorage.first = "";
-                cardStorage.second = "";
+                matchCard(selectedCardVal.first, selectedCardVal.second); // 매치하는 함수로인자 넘김
+                selectedCardVal.first = "";
+                selectedCardVal.second = "";
             }
             return;
         });
@@ -148,8 +149,8 @@ function cardAnimation(sucuessdVal) {
 var currentScore = 500;
 var myScore = document.querySelector('#my-score');
 var modal = document.querySelector('.modal');
+var dispScore = document.getElementById('display-score');
 function calcScore(num, completedCnt) {
-    var dispScore = document.getElementById('display-score');
     currentScore -= num;
     dispScore.innerHTML = currentScore.toString();
     if (currentScore == 0) {
@@ -159,6 +160,7 @@ function calcScore(num, completedCnt) {
     if (completedCnt == 4) {
         modal === null || modal === void 0 ? void 0 : modal.classList.remove('hidden');
         myScore.innerHTML = currentScore.toString();
+        addRank(userName.value, currentScore);
     }
 }
 function reload(msg) {

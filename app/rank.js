@@ -12,33 +12,40 @@ const firebaseConfig = {
 // Initialize Firebase
 // const app = initializeApp(firebaseConfig);
 firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
 
-    console.log(currentScore);
-    console.log(completedCnt);
-    const user = localStorage.getItem('name');
-    console.log(user);
-
-    const db = firebase.firestore();
+  function printRank() {
+    let rankingList = new Array();
     db.collection("ranking")
         .get()
         .then((res) => {
             res.forEach((doc) => {
-                console.log(doc.data());
+     
+                rankingList.push(doc.data());
+            
             })
         });
 
-     
-
-    function addRank() {
-      console.log("랭킹추가");
-    }
+}
+printRank();
 
 
+function addRank(userName, userScore) {
+    db.collection('ranking').add({ user: userName, score: userScore });
+    //   {user: 유저이름, score: 유저점수} 데이터베이스 입력
 
-   
-     
+    printList(printRank());
+}
 
-     
+function printList(lists) {
+    console.log(lists);
+}
+
+
+
+
+
+
     // db.collection('ranking').add({user : user ,score:currentScore});
 
 //     db.collection('ranking').add({score:300, user : "user2"});
