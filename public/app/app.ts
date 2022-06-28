@@ -14,7 +14,7 @@ function setName() {
     }
     else {
         alert("닉네임은 3글자 이상으로 설정해주세요.");
-}
+    }
 }
 
 
@@ -50,6 +50,7 @@ const cards: string[] = [
 function shuffle(cards: string[]) {
     return cards.sort(() => Math.random() - 0.5);
 }
+
 // 결과값을 shuffled 변수에 저장
 const shuffled = shuffle(cards);
 
@@ -101,7 +102,7 @@ function selecteCard() {
             let TargetFront = e.target as Element;
             let currentIndex = currentTarget.getAttribute('value');
             let TargetBack = currentTarget.children[1];
-         
+
             if (selectedCardVal.first == "") { // 첫번째 선택한 카드의값 
                 TargetFront.classList.add("on");
                 TargetBack.classList.add("on");
@@ -162,7 +163,7 @@ function cardAnimation(sucuessdVal: Array<string>) {
         let front = e.children[0]; // li > div class='front'
         let back = e.children[1];  // li > div class='back'
 
-        if (!(sucuessdVal.includes(front.getAttribute('value')as string))) {
+        if (!(sucuessdVal.includes(front.getAttribute('value') as string))) {
             // 현재뒤집은 카드에 성공value가 담긴 배열이 포함안되야 카드뒤집기 
             convertCard(front, back);
         }
@@ -171,14 +172,12 @@ function cardAnimation(sucuessdVal: Array<string>) {
 
 }
 
-
-
 let currentScore: number = 500;
 const myScore = document.querySelector('#my-score') as Element;
-const modal = document.querySelector('.modal')as Element;
-const dispScore = document.getElementById('display-score')as Element;
+const modal = document.querySelector('.modal') as Element;
+const dispScore = document.getElementById('display-score') as Element;
 function calcScore(num: number, completedCnt: number) {
-    
+
 
     currentScore -= num;
     dispScore.innerHTML = currentScore.toString();
@@ -203,7 +202,7 @@ function reload(msg: string) {
         gameDepth({ depth: 2 });
         sucuessdVal = [];
         completedCnt = 0;
-        currentScore=500;
+        currentScore = 500;
         cardAnimation(sucuessdVal);
         shuffle(cards);
         cardSet(shuffled);

@@ -1,89 +1,154 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Welcome to Firebase Hosting</title>
+<html class="dark" lang="en">
 
-    <!-- update the version number as needed -->
-    <script defer src="/__/firebase/9.8.4/firebase-app-compat.js"></script>
-    <!-- include only the Firebase features as you need -->
-    <script defer src="/__/firebase/9.8.4/firebase-auth-compat.js"></script>
-    <script defer src="/__/firebase/9.8.4/firebase-database-compat.js"></script>
-    <script defer src="/__/firebase/9.8.4/firebase-firestore-compat.js"></script>
-    <script defer src="/__/firebase/9.8.4/firebase-functions-compat.js"></script>
-    <script defer src="/__/firebase/9.8.4/firebase-messaging-compat.js"></script>
-    <script defer src="/__/firebase/9.8.4/firebase-storage-compat.js"></script>
-    <script defer src="/__/firebase/9.8.4/firebase-analytics-compat.js"></script>
-    <script defer src="/__/firebase/9.8.4/firebase-remote-config-compat.js"></script>
-    <script defer src="/__/firebase/9.8.4/firebase-performance-compat.js"></script>
-    <!-- 
-      initialize the SDK after all desired features are loaded, set useEmulator to false
-      to avoid connecting the SDK to running emulators.
-    -->
-    <script defer src="/__/firebase/init.js?useEmulator=true"></script>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" />
+    <link rel="stylesheet" href="css/style.css">
+    <script defer src="https://unpkg.com/alpinejs@3.9.1/dist/cdn.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-storage.js"></script>
+    <title>카드게임</title>
 
-    <style media="screen">
-      body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; }
-      #message { background: white; max-width: 360px; margin: 100px auto 16px; padding: 32px 24px; border-radius: 3px; }
-      #message h2 { color: #ffa100; font-weight: bold; font-size: 16px; margin: 0 0 8px; }
-      #message h1 { font-size: 22px; font-weight: 300; color: rgba(0,0,0,0.6); margin: 0 0 16px;}
-      #message p { line-height: 140%; margin: 16px 0 24px; font-size: 14px; }
-      #message a { display: block; text-align: center; background: #039be5; text-transform: uppercase; text-decoration: none; color: white; padding: 16px; border-radius: 4px; }
-      #message, #message a { box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); }
-      #load { color: rgba(0,0,0,0.4); text-align: center; font-size: 13px; }
-      @media (max-width: 600px) {
-        body, #message { margin-top: 0; background: white; box-shadow: none; }
-        body { border-top: 16px solid #ffa100; }
-      }
-    </style>
-  </head>
-  <body>
-    <div id="message">
-      <h2>Welcome</h2>
-      <h1>Firebase Hosting Setup Complete</h1>
-      <p>You're seeing this because you've successfully setup Firebase Hosting. Now it's time to go build something extraordinary!</p>
-      <a target="_blank" href="https://firebase.google.com/docs/hosting/">Open Hosting Documentation</a>
+</head>
+
+<body>
+    <div class="flex items-center justify-around relative h-screen">
+        <!-- step1 -->
+        <div class="start-page w-4/5 my-0 mx-auto flex flex-col min-w-375 absolute ">
+            <!-- 타이틀 -->
+            <h1 class="py-20 text-center font-semibold text-2xl">Card Game</h1>
+            <!-- 캐릭터선택 밑 닉네임 -->
+            <div class="justify-around flex py-20">
+                <button class="max-w-xs rounded-full flex items-center text-sm focus:outline-none relative ">
+                    <img class="h-40 w-40 rounded-full" src='card.png' alt="main_logo" />
+
+                </button>
+            </div>
+            <!-- 이름입력버튼 -->
+            <main class="flex w-full items-center justify-center">
+                <div x-data="{ open : false }" class="p-2 bg-white border shadow rounded w-96">
+
+                    <div x-show="!open" class="flex justify-between items-center">
+                        <div class="display-name ml-2">게스트</div>
+                        <button type="button"
+                            class="btn bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 font-medium rounded "
+                            @click="open = !open">Edit</button>
+                    </div>
+
+                    <!-- container after clicked "EDIT" -->
+                    <div x-show="open" class="flex justify-between items-center">
+                        <input type="text" class="user-name w-full bg-gray-100 rounded p-2 mr-4" value="게스트">
+
+                        <div class="flex justify-center items-center space-x-2">
+                            <button type="button"
+                                class="rounded bg-emerald-500 hover:bg-emerald-600 w-10 h-10 text-white text-3xl"
+                                @click="open = false" onclick="setName()">
+                                <i class='bx bx-check'></i>
+                            </button>
+                            <button type="button"
+                                class="rounded bg-red-500 hover:bg-red-600 text-white w-10 h-10 text-3xl"
+                                @click="open = false">
+                                <i class='bx bx-x'></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </main>
+            <!-- 버튼모음 -->
+            <div class="flex justify-center py-20">
+                <button type="button"
+                    class="border mx-10 border-green-500 bg-green-500 text-white rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-green-600 focus:outline-none focus:shadow-outline"
+                    onclick="gameDepth({depth:2})">
+                    게임시작
+                </button>
+                <a href="https://github.com/kwonseokki/cardgame">
+                    <button type="button"
+                        class="border mx-10 border-green-500 bg-green-500 text-white rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-green-600 focus:outline-none focus:shadow-outline">
+                        github
+                    </button>
+                </a>
+            </div>
+        </div>
+
+        <!-- step2 게임시작 -->
+        <div
+            class="game-page start-page w-4/5 my-0 mx-auto  items-center justify-center flex flex-col min-w-375 absolute hidden">
+            <!-- 유저 사진 이름 -->
+            <div class="flex items-center justify-center col-auto">
+              
+                <h1 class="profile-name py-10 text-center font-semibold text-2xl">
+                    게스트네임
+                </h1>
+            </div>
+            <!-- 점수판 -->
+            <button
+                class=" flex shadow w-32 block border-green-500 border-2 rounded-full focus:outline-none focus:border-green-500 px-4 py-2 text-green-500 hover:bg-green-500 hover:text-white">
+                <span>score:</span> &nbsp;&nbsp;<span id="display-score">500</span>
+
+            </button>
+            <!-- 카드공간 -->
+            <div>
+                <ul class=" flex max-w-screen-lg card-zone flex-wrap justify-around">
+
+                </ul>
+            </div>
+
+        </div>
+
+        <div class="modal hidden">
+            <div style="z-index:1000;"
+                class="bg-slate-800 bg-opacity-50 flex justify-center items-center absolute top-0 right-0 bottom-0 left-0">
+                <div class="bg-white px-10 py-14 rounded-md text-center">
+                    <h1 class="text-xl mb-4 font-bold text-slate-500">니점수 <span id="my-score"></span></h1>
+                    <div>
+                        <!-- 순위 -->
+                        <div class="flex flex-col h-96">
+                            <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
+                                <div class="py-2 inline-block min-w-full sm:px-6 lg:px-8">
+                                    <div class="overflow-hidden">
+                                        <table class="min-w-full text-center">
+                                            <thead class="border-b">
+                                                <tr>
+                                                    <th scope="col" class="text-sm font-medium text-gray-900 px-6 py-4">
+                                                        이름
+                                                    </th>
+                                                    <th scope="col" class="text-sm font-medium text-gray-900 px-6 py-4">
+                                                        점수
+                                                    </th>
+
+                                                </tr>
+                                            </thead>
+                                            <tbody class="tbody">
+                                                <tr class="border-b max">
+
+
+                                                </tr>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="bg-green-500 px-4 py-2 rounded-md text-md text-white"
+                        onclick="reload('retry')">다시하기</button>
+                    <button class="bg-red-500 px-7 py-2 ml-2 rounded-md text-md text-white font-semibold"
+                        onclick="reload('first')">처음으로</button>
+                </div>
+            </div>
+        </div>
     </div>
-    <p id="load">Firebase SDK Loading&hellip;</p>
+    <script src="app/interface.js"></script>
+    <script src="app/app.js"></script>
+    <script src="app/rank.js"></script>
 
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        const loadEl = document.querySelector('#load');
-        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
-        // // The Firebase SDK is initialized and available here!
-        //
-        // firebase.auth().onAuthStateChanged(user => { });
-        // firebase.database().ref('/path/to/ref').on('value', snapshot => { });
-        // firebase.firestore().doc('/foo/bar').get().then(() => { });
-        // firebase.functions().httpsCallable('yourFunction')().then(() => { });
-        // firebase.messaging().requestPermission().then(() => { });
-        // firebase.storage().ref('/path/to/ref').getDownloadURL().then(() => { });
-        // firebase.analytics(); // call to activate
-        // firebase.analytics().logEvent('tutorial_completed');
-        // firebase.performance(); // call to activate
-        //
-        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+</body>
 
-        try {
-          let app = firebase.app();
-          let features = [
-            'auth', 
-            'database', 
-            'firestore',
-            'functions',
-            'messaging', 
-            'storage', 
-            'analytics', 
-            'remoteConfig',
-            'performance',
-          ].filter(feature => typeof app[feature] === 'function');
-          loadEl.textContent = `Firebase SDK loaded with ${features.join(', ')}`;
-        } catch (e) {
-          console.error(e);
-          loadEl.textContent = 'Error loading the Firebase SDK, check the console.';
-        }
-      });
-    </script>
-  </body>
 </html>

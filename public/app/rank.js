@@ -44,9 +44,7 @@ function addRank(userName, userScore) {
     printRank();
 }
 
-function printList(lists) {
-    console.log(lists);
-}
+
 
 
 
